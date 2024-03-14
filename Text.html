@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Balloon Pop Game</title>
+  <style>
+    #game {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #timer {
+      font-size: 2em;
+    }
+
+    #score {
+      font-size: 1.2em;
+    }
+
+    .balloon {
+      position: absolute;
+      width: 50px;
+      height: 70px;
+      background-color: red;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-150vh); }
+    }
+  </style>
+</head>
+<body>
+  <div id="game">
+    <div id="timer">02:00</div>
+    <div id="score">Balloons Popped: <span id="popped">0</span> | Balloons Missed: <span id="missed">0</span></div>
+    <div id="balloons"></div>
+  </div>
+  <script>
+    const balloons = document.getElementById('balloons');
+    const timerDisplay = document.getElementById('timer');
+    const poppedDisplay = document.getElementById('popped');
+    const missedDisplay = document.getElementById('missed');
+
+    let poppedCount = 0;
+    let missedCount = 0;
+    let timer = 120;
+
+    function generateBalloon() {
+      const balloon = document.createElement('div');
+      balloon.classList.add('balloon');
+      balloon.style.left = `${Math.random() * 90}%`;
+      balloons.appendChild(balloon);
+      balloon.addEventListener('click', () => {
+        poppedCount++;
+        poppedDisplay.textContent = poppedCount;
+        balloon.remove();
+      });
+      setTimeout(() => {
+        missedCount++;
+        missedDisplay.textContent = missedCount;
+        balloon.remove();
+      }, 2000);
+    }
+
+    function startTimer() {
+      const interval = setInterval(() => {
+        timer--;
+        const minutes = Math.floor(timer / 60);
+        const seconds = timer % 60;
+        timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        if (timer === 0) {
+          clearInterval(interval);
+          endGame();
+        }
+      }, 1000);
+    }
+
+    function endGame() {
+      // Display final score and option to play again
+      alert(`Game Over!\nBalloons Popped: ${poppedCount}\nBalloons Missed: ${missedCount}`);
+      // You can add a "Play Again" button or reload the page to restart the game
+    }
+
+    function initGame() {
+      startTimer();
+      setInterval(generateBalloon, 1000);
+    }
+
+    initGame();
+  </script>
+</body>
+</html>
+
+
+
+    
+ 
+
+
+
+
+
